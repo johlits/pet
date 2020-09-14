@@ -79,7 +79,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p>
-          <Pet name={"baby"} />
+          <Pet name={"bella"} />
         </p>
       </header>
     </div>
