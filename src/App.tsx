@@ -59,18 +59,57 @@ interface PetProps {
   name?: string;
 }
 
-type PetState = { stats: any };
+type PetState = { text: string, name: string, stats: any };
 
 class Pet extends React.Component<PetProps, PetState> {
   constructor(props: any) {
     super(props);
-    this.state = { stats: [{name: 'Hunger', value: 1000, action: 'Bathe', timer: 5}, {name: 'Hygiene', value: 1000, action: 'Shower', timer: 10}] };
+    this.state = { text: '', name: '', stats: [
+      {name: 'Hunger', value: 100, action: 'Feed', timer: 5}, 
+      {name: 'Hygiene', value: 100, action: 'Shower', timer: 10}, 
+      {name: 'Energy', value: 100, action: 'Sleep', timer: 20}] };
+      
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  handleChange(e: { target: { value: any; }; }) {
+    this.setState({ text: e.target.value });
+  }
+
+  handleSubmit(e: { preventDefault: () => void; }) {
+    e.preventDefault();
+    if (this.state.text.length === 0) {
+      return;
+    }
+    this.setState(state => ({
+      name: this.state.text
+    }));
+  }
+
   render() {
-    const statItems = this.state.stats.map((item: { name: any; value: any; action: any; timer: any; }) => 
+
+    if (this.state.name.length < 1) {
+      return <form onSubmit={this.handleSubmit}>
+          <label htmlFor="new-pet">
+            Name your pet: 
+          </label>
+          <input
+            id="new-pet"
+            onChange={this.handleChange}
+            value={this.state.text}
+          />
+          <button>
+            Create
+          </button>
+        </form>;
+    }
+    else {
+      const statItems = this.state.stats.map((item: { name: any; value: any; action: any; timer: any; }) => 
       <Stat name={item.name} value={item.value} action={item.action} timer={item.timer}></Stat>);
 
-    return <div><h1>{this.props.name}</h1>{statItems}</div>;
+      return <div><h1>{this.state.name}</h1>{statItems}</div>;
+    }
   }
 }
 
@@ -79,7 +118,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p>
-          <Pet name={"bella"} />
+          <Pet />
         </p>
       </header>
     </div>
