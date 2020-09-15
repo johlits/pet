@@ -3,23 +3,23 @@ import logo from './logo.svg';
 import './App.css';
 
 interface StatProps {
-  name?: any;
-  value?: any;
-  action?: any;
-  seconds?: any;
-  timer?: any;
-  disabled?: any;
-  parentCallback?: any;
+  name: string;
+  action: string;
+  timer: number;
+  disabled: boolean;
+  parentCallback: any;
 }
 
 type StatState = { 
-  value: any,
-  seconds: any,
-  disabled: any
+  value: number,
+  seconds: number,
+  disabled: boolean
 };
 
 class Stat extends React.Component<StatProps, StatState> {
+
   interval: any;
+
   constructor(props: any) {
     super(props)
     this.state = { value: 100, seconds: 0, disabled: this.props.disabled };
@@ -75,9 +75,7 @@ class Stat extends React.Component<StatProps, StatState> {
   }
 }
 
-interface PetProps {
-  name?: string;
-}
+interface PetProps {}
 
 type PetState = { text: string, name: string, sleeping: boolean };
 
