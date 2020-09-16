@@ -1,6 +1,10 @@
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
+import Card from 'react-bootstrap/Card'
+import Col from 'react-bootstrap/Col'
+import Nav from 'react-bootstrap/Nav'
+import { MDBContainer } from 'mdbreact';
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -51,24 +55,34 @@ class Pet extends React.Component<PetProps, PetState> {
   render() {
 
     if (this.state.name.length < 1) {
-      return <Form onSubmit={this.handleSubmit}><Form.Group>
-        <Form.Label htmlFor="new-pet">
-          Name your pet:
-          </Form.Label>
-          <Form.Control type="text" placeholder="Enter pet name" onChange={this.handleChange} value={this.state.text} />
-        <Button variant="primary" type="submit">
-          Create
-        </Button>
-        <Form.Text className="text-muted"><a href="https://github.com/johlits/pet">GitHub</a></Form.Text>
-      </Form.Group>
-      </Form>;
+      return <Container><Card bg="dark" text="light"><Card.Header as="h5">Create pet</Card.Header><Card.Text><Form onSubmit={this.handleSubmit}>
+        <Form.Group>
+          <Form.Row>
+            <Col>
+              <Form.Label htmlFor="new-pet">
+                Name your pet:
+              </Form.Label>
+            </Col>
+          </Form.Row>
+          <Form.Row>
+            <MDBContainer>
+            <Form.Control type="text" placeholder="Enter pet name" onChange={this.handleChange} value={this.state.text} />
+            <Button variant="primary" type="submit">
+                Create
+              </Button>
+            </MDBContainer>
+          </Form.Row>
+          <Form.Row className="align-items-center">
+          </Form.Row>
+        </Form.Group>
+      </Form></Card.Text></Card><Nav.Link href="https://github.com/johlits/pet"><small className="linkText">GitHub</small></Nav.Link></Container>;
     }
     else {
-      return <Container><h1>{this.state.name}</h1>
+      return <Container><Card bg="dark" text="light"><Card.Header as="h5">{this.state.name}</Card.Header><Card.Text>
         <Stat parentCallback={this.callbackFunction} name={STATS[0].name} action={STATS[0].action} timer={STATS[0].timer} disabled={this.state.sleeping}></Stat>
         <Stat parentCallback={this.callbackFunction} name={STATS[1].name} action={STATS[1].action} timer={STATS[1].timer} disabled={this.state.sleeping}></Stat>
         <Stat parentCallback={this.callbackFunction} name={STATS[2].name} action={STATS[2].action} timer={STATS[2].timer} disabled={this.state.sleeping}></Stat>
-        </Container>;
+      </Card.Text></Card></Container>;
     }
   }
 }
@@ -77,7 +91,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-          <Pet />
+        <Pet />
       </header>
     </div>
   );
