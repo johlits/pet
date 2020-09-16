@@ -1,3 +1,4 @@
+import Button from 'react-bootstrap/Button';
 import React from 'react';
 
 interface StatProps {
@@ -69,6 +70,6 @@ export default class Stat extends React.Component<StatProps, StatState> {
     }
 
     render() {
-        return <p>{this.props.name} : {this.state.value} <button onClick={this.Increment} disabled={this.state.disabled || this.state.value >= 100}>{this.props.action}</button></p>;
+        return <p>{this.props.name} : {this.state.value} <Button onClick={this.Increment} disabled={this.state.disabled || this.state.value >= 100}>{this.props.action}</Button></p>;
     }
 }

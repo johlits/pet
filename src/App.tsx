@@ -1,3 +1,5 @@
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -48,19 +50,17 @@ class Pet extends React.Component<PetProps, PetState> {
   render() {
 
     if (this.state.name.length < 1) {
-      return <div><form onSubmit={this.handleSubmit}>
-        <label htmlFor="new-pet">
+      return <Form onSubmit={this.handleSubmit}><Form.Group>
+        <Form.Label htmlFor="new-pet">
           Name your pet:
-          </label>
-        <input
-          id="new-pet"
-          onChange={this.handleChange}
-          value={this.state.text}
-        />
-        <button>
+          </Form.Label>
+          <Form.Control type="text" placeholder="Enter pet name" onChange={this.handleChange} value={this.state.text} />
+        <Button variant="primary" type="submit">
           Create
-          </button>
-      </form><a href="https://github.com/johlits/pet">GitHub</a></div>;
+        </Button>
+        <Form.Text className="text-muted"><a href="https://github.com/johlits/pet">GitHub</a></Form.Text>
+      </Form.Group>
+      </Form>;
     }
     else {
       return <div><h1>{this.state.name}</h1>
