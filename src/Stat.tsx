@@ -1,3 +1,5 @@
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button';
 import React from 'react';
 
@@ -70,6 +72,6 @@ export default class Stat extends React.Component<StatProps, StatState> {
     }
 
     render() {
-        return <p>{this.props.name} : {this.state.value} <Button onClick={this.Increment} disabled={this.state.disabled || this.state.value >= 100}>{this.props.action}</Button></p>;
+        return <Row><Col xs={4}>{this.props.name}</Col><Col xs={4}>{this.state.value}</Col><Col xs={4}><Button variant="success" onClick={this.Increment} disabled={this.state.disabled || this.state.value >= 100}>{this.props.action}</Button></Col></Row>;
     }
 }

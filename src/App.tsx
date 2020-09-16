@@ -1,3 +1,4 @@
+import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import React from 'react';
@@ -63,10 +64,11 @@ class Pet extends React.Component<PetProps, PetState> {
       </Form>;
     }
     else {
-      return <div><h1>{this.state.name}</h1>
+      return <Container><h1>{this.state.name}</h1>
         <Stat parentCallback={this.callbackFunction} name={STATS[0].name} action={STATS[0].action} timer={STATS[0].timer} disabled={this.state.sleeping}></Stat>
         <Stat parentCallback={this.callbackFunction} name={STATS[1].name} action={STATS[1].action} timer={STATS[1].timer} disabled={this.state.sleeping}></Stat>
-        <Stat parentCallback={this.callbackFunction} name={STATS[2].name} action={STATS[2].action} timer={STATS[2].timer} disabled={this.state.sleeping}></Stat></div>;
+        <Stat parentCallback={this.callbackFunction} name={STATS[2].name} action={STATS[2].action} timer={STATS[2].timer} disabled={this.state.sleeping}></Stat>
+        </Container>;
     }
   }
 }
@@ -75,9 +77,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
           <Pet />
-        </p>
       </header>
     </div>
   );
