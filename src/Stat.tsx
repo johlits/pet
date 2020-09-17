@@ -72,6 +72,6 @@ export default class Stat extends React.Component<StatProps, StatState> {
     }
 
     render() {
-        return <Row><Col xs={4}>{this.props.name}</Col><Col xs={4}>{this.state.value}</Col><Col xs={4}><Button variant="success" onClick={this.Increment} disabled={this.state.disabled || this.state.value >= 100}>{this.props.action}</Button></Col></Row>;
+        return <Row className="mb-1 mt-1"><Col xs={4}>{this.props.name}</Col><Col xs={4}>{this.state.value}</Col><Col xs={4}><Button variant="secondary" onClick={this.Increment} disabled={this.state.disabled || this.state.value >= 100}>{this.props.action}</Button></Col></Row>;
     }
 }

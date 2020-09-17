@@ -1,98 +1,43 @@
-import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form'
-import Card from 'react-bootstrap/Card'
-import Col from 'react-bootstrap/Col'
-import Nav from 'react-bootstrap/Nav'
-import { MDBContainer } from 'mdbreact';
 import React from 'react';
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
 import logo from './logo.svg';
 import './App.css';
 
-import Stat from './Stat'
+import Pet from './Pet'
 
-interface PetProps { }
+interface PetContainerProps { }
 
-type PetState = { text: string, name: string, sleeping: boolean };
+type PetContainerState = { pets: number };
 
-const STATS = [
-  { name: 'Hunger', value: 100, action: 'Feed', seconds: 0, timer: 2 },
-  { name: 'Hygiene', value: 100, action: 'Shower', seconds: 0, timer: 8 },
-  { name: 'Energy', value: 100, action: 'Sleep', seconds: 0, timer: 4 }];
-
-class Pet extends React.Component<PetProps, PetState> {
+class PetContainer extends React.Component<PetContainerProps, PetContainerState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { text: '', name: '', sleeping: false };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = { pets: 0 };
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  callbackFunction = (childData: any) => {
-    if (childData.key === 'Energy' && childData.change === 1) {
-      this.setState({ sleeping: true });
-    }
-    else if (childData.key === 'Energy' && childData.change === -1) {
-      this.setState({ sleeping: false });
-    }
-  }
-
-  handleChange(e: { target: { value: any; }; }) {
-    this.setState({ text: e.target.value });
-  }
-
-  handleSubmit(e: { preventDefault: () => void; }) {
-    e.preventDefault();
-    if (this.state.text.length === 0) {
-      return;
-    }
-    this.setState(state => ({
-      name: this.state.text
-    }));
+  handleClick() {
+    this.setState({ pets: this.state.pets + 1 });
   }
 
   render() {
 
-    if (this.state.name.length < 1) {
-      return <Container><Card bg="dark" text="light"><Card.Header as="h5">Create pet</Card.Header><Card.Text><Form onSubmit={this.handleSubmit}>
-        <Form.Group>
-          <Form.Row>
-            <Col>
-              <Form.Label htmlFor="new-pet">
-                Name your pet:
-              </Form.Label>
-            </Col>
-          </Form.Row>
-          <Form.Row>
-            <MDBContainer>
-            <Form.Control type="text" placeholder="Enter pet name" onChange={this.handleChange} value={this.state.text} />
-            <Button variant="primary" type="submit">
-                Create
-              </Button>
-            </MDBContainer>
-          </Form.Row>
-          <Form.Row className="align-items-center">
-          </Form.Row>
-        </Form.Group>
-      </Form></Card.Text></Card><Nav.Link href="https://github.com/johlits/pet"><small className="linkText">GitHub</small></Nav.Link></Container>;
+    let pets = [];
+    for (let i = 0; i < this.state.pets; i++) {
+      pets.push(<Pet key={i} />);
     }
-    else {
-      return <Container><Card bg="dark" text="light"><Card.Header as="h5">{this.state.name}</Card.Header><Card.Text>
-        <Stat parentCallback={this.callbackFunction} name={STATS[0].name} action={STATS[0].action} timer={STATS[0].timer} disabled={this.state.sleeping}></Stat>
-        <Stat parentCallback={this.callbackFunction} name={STATS[1].name} action={STATS[1].action} timer={STATS[1].timer} disabled={this.state.sleeping}></Stat>
-        <Stat parentCallback={this.callbackFunction} name={STATS[2].name} action={STATS[2].action} timer={STATS[2].timer} disabled={this.state.sleeping}></Stat>
-      </Card.Text></Card></Container>;
-    }
+
+    return <header className="App-header"><Navbar fixed="top" bg="dark" variant="dark" expand="lg"><Navbar.Brand href="#home">PetPaw</Navbar.Brand></Navbar>{pets}<Button variant="success" onClick={this.handleClick}>Add pet</Button><Nav.Link href="https://github.com/johlits/pet"><small className="linkText">GitHub</small></Nav.Link></header>;
   }
 }
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <Pet />
-      </header>
+      <PetContainer />
     </div>
   );
 }
