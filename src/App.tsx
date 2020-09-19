@@ -1,8 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import React from 'react';
-import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import logo from './logo.svg';
+import { MDBContainer, MDBRow, MDBFooter } from "mdbreact";
 import './App.css';
 
 import Pet from './Pet'
@@ -30,14 +29,25 @@ class PetContainer extends React.Component<PetContainerProps, PetContainerState>
       pets.push(<Pet key={i} />);
     }
 
-    return <header className="App-header"><Navbar fixed="top" bg="dark" variant="dark" expand="lg"><Navbar.Brand href="#home">PetPaw</Navbar.Brand></Navbar>{pets}<Button variant="success" onClick={this.handleClick}>Add pet</Button><Nav.Link href="https://github.com/johlits/pet"><small className="linkText">GitHub</small></Nav.Link></header>;
+    return <MDBContainer><MDBRow>{pets}</MDBRow><MDBRow className="row d-flex justify-content-center text-center"><Button variant="success" onClick={this.handleClick}>Add pet</Button></MDBRow></MDBContainer>;
   }
 }
 
 function App() {
   return (
     <div className="App">
-      <PetContainer />
+      <header className="App-header"><Navbar fixed="top" bg="dark" variant="dark" expand="lg"><Navbar.Brand href="#home">PetPaw</Navbar.Brand></Navbar>
+      </header>
+      <main role='main' className='flex-shrink-0'>
+      <PetContainer /></main>
+      <footer className='footer mt-auto py-3 text-white fixed-bottom'>
+      <MDBFooter color="blue" className="font-small"><div className="footer-copyright text-center py-1">
+        <MDBContainer fluid>
+        <a href="https://github.com/johlits/pet"><span className="linkText">GitHub</span></a> &copy; {new Date().getFullYear()}
+        </MDBContainer>
+      </div></MDBFooter></footer>
+      
+      
     </div>
   );
 }

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #1a1d20;
 }
 
 .App-logo {
@@ -14,9 +15,8 @@
 }
 
 .App-header {
-  background-color: #1a1d20;
-  min-height: 100vh;
   display: flex;
+  min-height: 10vmin;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -28,6 +28,10 @@
   color: #61dafb;
 }
 
+main > .container {
+  padding: 60px 15px 0;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -35,4 +39,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+body > #root > div {
+  height: 100vh;
 }
