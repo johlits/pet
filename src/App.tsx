@@ -8,25 +8,31 @@ import Pet from './Pet'
 
 interface PetContainerProps { }
 
-type PetContainerState = { pets: number };
+type PetContainerState = { pets: any, petId: number };
 
 class PetContainer extends React.Component<PetContainerProps, PetContainerState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { pets: 0 };
+    this.state = { pets: [], petId: 1 };
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    this.setState({ pets: this.state.pets + 1 });
+    this.setState({ pets: [...this.state.pets, this.state.petId], petId: this.state.petId + 1 });
+  }
+
+  callbackFunction = (childData: any) => {
+    console.log(childData);
+    console.log(this.state.pets);
+    this.setState({ pets: this.state.pets.filter((x: any) => x !== childData.id) });
   }
 
   render() {
 
     let pets = [];
-    for (let i = 0; i < this.state.pets; i++) {
-      pets.push(<Pet key={i} />);
+    for (let i = 0; i < this.state.pets.length; i++) {
+      pets.push(<Pet parentCallback={this.callbackFunction} key={this.state.pets[i]} id={this.state.pets[i]} />);
     }
 
     return <MDBContainer><MDBRow>{pets}</MDBRow><MDBRow className="row d-flex justify-content-center text-center"><Button variant="success" onClick={this.handleClick}>Add pet</Button></MDBRow></MDBContainer>;
