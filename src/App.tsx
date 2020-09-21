@@ -35,7 +35,26 @@ class PetContainer extends React.Component<PetContainerProps, PetContainerState>
   }
 
   componentDidMount() {
-    this.setState({ pets: ls.get('pets') || [], petId: ls.get('petId') });
+    let pets = ls.get('pets') || [];
+    this.setState({ pets: pets, petId: ls.get('petId') });
+
+    // remove deleted pets from local storage
+    let toRemove = [];
+    if (localStorage != null) {
+      for (let i = 0; i < localStorage.length; i++){
+        let key = localStorage.key(i);
+        let no = key == null ? '' : key.replace(/\D/g,'');
+        if (no.length > 0) {
+          if (!pets.includes(parseInt(no))) {
+            toRemove.push(key);
+          }
+        }
+      }
+    }
+    for (let i = 0; i < toRemove.length; i++) {
+      console.log("removing " + toRemove[i]);
+      ls.remove(toRemove[i]);
+    }
   }
 
   render() {

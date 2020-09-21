@@ -23,7 +23,6 @@ export default class Pet extends React.Component<PetProps, PetState> {
 
   constructor(props: any) {
     super(props);
-    console.log(this.props);
     this.state = { text: '', name: '', sleeping: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
