@@ -1,90 +1,63 @@
-import Button from 'react-bootstrap/Button';
-import React from 'react';
+import React from 'react'
+import { render } from "react-dom";
 import Navbar from 'react-bootstrap/Navbar'
-import { MDBContainer, MDBRow, MDBFooter } from "mdbreact";
-import './App.css';
+import { MDBContainer, MDBRow, MDBFooter, MDBNavItem, MDBNavLink, MDBNavbarNav, MDBCollapse, MDBNavbarToggler } from 'mdbreact'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import './App.css'
 
-import Pet from './Pet'
+import PetContainer from './components/PetContainer'
+import About from './components/About'
 
-var ls = require('local-storage');
+interface AppProps { }
 
-interface PetContainerProps { }
+type AppState = { collapse: any };
 
-type PetContainerState = { pets: any, petId: number };
+class App extends React.Component<AppProps, AppState> {
 
-class PetContainer extends React.Component<PetContainerProps, PetContainerState> {
-
-  constructor(props: any) {
+  constructor(props) {
     super(props);
-    this.state = { pets: [], petId: 1 };
-    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      collapse: false,
+    };
+    this.navbarToggle = this.navbarToggle.bind(this);
   }
 
-  handleClick() {
-    let pets = [...this.state.pets, this.state.petId];
-    let petId = this.state.petId + 1;
-    this.setState({ pets: pets, petId: petId });
-    ls.set('pets', pets);
-    ls.set('petId', petId);
-  }
-
-  callbackFunction = (childData: any) => {
-    let pets = this.state.pets.filter((x: any) => x !== childData.id);
-    this.setState({ pets: pets });
-    ls.set('pets', pets);
-  }
-
-  componentDidMount() {
-    let pets = ls.get('pets') || [];
-    this.setState({ pets: pets, petId: ls.get('petId') });
-
-    // remove deleted pets from local storage
-    let toRemove = [];
-    if (localStorage != null) {
-      for (let i = 0; i < localStorage.length; i++){
-        let key = localStorage.key(i);
-        let no = key == null ? '' : key.replace(/\D/g,'');
-        if (no.length > 0) {
-          if (!pets.includes(parseInt(no))) {
-            toRemove.push(key);
-          }
-        }
-      }
-    }
-    for (let i = 0; i < toRemove.length; i++) {
-      console.log("removing " + toRemove[i]);
-      ls.remove(toRemove[i]);
-    }
+  navbarToggle() {
+    this.setState({
+      collapse: !this.state.collapse,
+    });
   }
 
   render() {
-
-    let pets = [];
-    for (let i = 0; i < this.state.pets.length; i++) {
-      pets.push(<Pet parentCallback={this.callbackFunction} key={this.state.pets[i]} id={this.state.pets[i]} />);
-    }
-
-    return <MDBContainer><MDBRow>{pets}</MDBRow><MDBRow className="row d-flex justify-content-center text-center"><Button variant="success" onClick={this.handleClick}>Add pet</Button></MDBRow></MDBContainer>;
+    return (
+      <div className="App">
+        <Router>
+        <header className="App-header"><Navbar fixed="top" bg="dark" variant="dark" expand="lg"><Navbar.Brand href="/">PetPaw</Navbar.Brand><MDBNavbarNav left>
+        <MDBNavbarToggler onClick={this.navbarToggle} />
+        <MDBCollapse isOpen={this.state.collapse} navbar>
+              <MDBNavItem>
+                <MDBNavLink to="/">Home</MDBNavLink>
+              </MDBNavItem>
+              <MDBNavItem>
+                <MDBNavLink to="/about">About</MDBNavLink>
+              </MDBNavItem>
+        </MDBCollapse></MDBNavbarNav></Navbar>
+        </header>
+        <main role='main' className='flex-shrink-0'>
+        <Route exact path='/' component={PetContainer} />
+        <Route path='/about' component={About} />
+        </main>
+        <footer className='footer mt-auto py-3 text-white fixed-bottom'>
+        <MDBFooter color="blue" className="font-small"><div className="footer-copyright text-center py-1">
+          <MDBContainer fluid>
+          &copy; {new Date().getFullYear()}
+          </MDBContainer>
+        </div></MDBFooter></footer></Router>
+      </div>
+    );
   }
 }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header"><Navbar fixed="top" bg="dark" variant="dark" expand="lg"><Navbar.Brand href="#home">PetPaw</Navbar.Brand></Navbar>
-      </header>
-      <main role='main' className='flex-shrink-0'>
-      <PetContainer /></main>
-      <footer className='footer mt-auto py-3 text-white fixed-bottom'>
-      <MDBFooter color="blue" className="font-small"><div className="footer-copyright text-center py-1">
-        <MDBContainer fluid>
-        <a href="https://github.com/johlits/pet"><span className="linkText">GitHub</span></a> &copy; {new Date().getFullYear()}
-        </MDBContainer>
-      </div></MDBFooter></footer>
-      
-      
-    </div>
-  );
-}
-
 export default App;
+
+render(<App />, document.getElementById("root"));
