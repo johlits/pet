@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import { MDBContainer, MDBRow, MDBFooter, MDBNavItem, MDBNavLink, MDBNavbarNav, MDBCollapse, MDBNavbarToggler } from 'mdbreact'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import './App.css'
+import logo from './petpaw.png';
 
 import PetContainer from './components/PetContainer'
 import About from './components/About'
@@ -32,7 +33,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <div className="App">
         <Router>
-        <header className="App-header"><Navbar fixed="top" bg="dark" variant="dark" expand="lg"><Navbar.Brand href="/">PetPaw</Navbar.Brand><MDBNavbarNav left>
+        <header className="App-header"><Navbar fixed="top" bg="dark" variant="dark" expand="lg"><Navbar.Brand href="/"><img src={logo} alt="Logo" /></Navbar.Brand><MDBNavbarNav right>
         <MDBNavbarToggler onClick={this.navbarToggle} />
         <MDBCollapse isOpen={this.state.collapse} navbar>
               <MDBNavItem>
