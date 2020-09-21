@@ -6,6 +6,8 @@ import './App.css';
 
 import Pet from './Pet'
 
+var ls = require('local-storage');
+
 interface PetContainerProps { }
 
 type PetContainerState = { pets: any, petId: number };
@@ -19,13 +21,21 @@ class PetContainer extends React.Component<PetContainerProps, PetContainerState>
   }
 
   handleClick() {
-    this.setState({ pets: [...this.state.pets, this.state.petId], petId: this.state.petId + 1 });
+    let pets = [...this.state.pets, this.state.petId];
+    let petId = this.state.petId + 1;
+    this.setState({ pets: pets, petId: petId });
+    ls.set('pets', pets);
+    ls.set('petId', petId);
   }
 
   callbackFunction = (childData: any) => {
-    console.log(childData);
-    console.log(this.state.pets);
-    this.setState({ pets: this.state.pets.filter((x: any) => x !== childData.id) });
+    let pets = this.state.pets.filter((x: any) => x !== childData.id);
+    this.setState({ pets: pets });
+    ls.set('pets', pets);
+  }
+
+  componentDidMount() {
+    this.setState({ pets: ls.get('pets') || [], petId: ls.get('petId') });
   }
 
   render() {

@@ -3,9 +3,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import { MDBContainer } from 'mdbreact';
 import React from 'react';
 import Stat from './Stat'
+
+var ls = require('local-storage');
 
 interface PetProps { parentCallback: any; id: number }
 
@@ -27,7 +30,6 @@ export default class Pet extends React.Component<PetProps, PetState> {
   }
 
   Remove = () => {
-    console.log(this.props.id);
     this.sendData({ id: this.props.id });
   }
 
@@ -54,6 +56,11 @@ export default class Pet extends React.Component<PetProps, PetState> {
       return;
     }
     this.setState({ name: this.state.text });
+    ls.set('p' + this.props.id, this.state.text);
+  }
+
+  componentDidMount() {
+    this.setState({ name: ls.get('p' + this.props.id) || '' });
   }
 
   render() {
@@ -82,11 +89,20 @@ export default class Pet extends React.Component<PetProps, PetState> {
       </Form></Card.Text></Card></Container>;
     }
     else {
-      return <Container className="mb-2"><Card bg="dark" text="light"><Card.Header as="h5">{this.state.name}</Card.Header><Card.Text className="mb-1 mt-1">
-        <Stat parentCallback={this.callbackFunction} name={STATS[0].name} action={STATS[0].action} timer={STATS[0].timer} disabled={this.state.sleeping}></Stat>
-        <Stat parentCallback={this.callbackFunction} name={STATS[1].name} action={STATS[1].action} timer={STATS[1].timer} disabled={this.state.sleeping}></Stat>
-        <Stat parentCallback={this.callbackFunction} name={STATS[2].name} action={STATS[2].action} timer={STATS[2].timer} disabled={this.state.sleeping}></Stat>
-        <Button variant="danger" onClick={this.Remove}>Delete</Button>
+      return <Container className="mb-2"><Card bg="dark" text="light"><Card.Header as="h5">
+        <Container>
+          <Row>
+    <Col><Button className="float-left" variant="danger" onClick={this.Remove}>Delete</Button></Col>
+    <Col md="auto">{this.state.name}</Col>
+    <Col>
+    </Col>
+  </Row>
+</Container>
+        
+        </Card.Header><Card.Text className="mb-1 mt-1">
+        <Stat parentCallback={this.callbackFunction} name={STATS[0].name} action={STATS[0].action} timer={STATS[0].timer} disabled={this.state.sleeping} pid={this.props.id}></Stat>
+        <Stat parentCallback={this.callbackFunction} name={STATS[1].name} action={STATS[1].action} timer={STATS[1].timer} disabled={this.state.sleeping} pid={this.props.id}></Stat>
+        <Stat parentCallback={this.callbackFunction} name={STATS[2].name} action={STATS[2].action} timer={STATS[2].timer} disabled={this.state.sleeping} pid={this.props.id}></Stat>
       </Card.Text></Card></Container>;
     }
   }

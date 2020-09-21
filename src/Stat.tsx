@@ -3,12 +3,15 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button';
 import React from 'react';
 
+var ls = require('local-storage');
+
 interface StatProps {
     name: string;
     action: string;
     timer: number;
     disabled: boolean;
     parentCallback: any;
+    pid: number;
 }
 
 type StatState = {
@@ -26,12 +29,16 @@ export default class Stat extends React.Component<StatProps, StatState> {
         this.state = { value: 100, seconds: 0, disabled: this.props.disabled };
     }
     Increment = () => {
-        this.setState({ value: this.state.value + 1 });
-        this.sendData({ key: this.props.name, value: this.state.value, change: 1 });
+        let val = this.state.value + 1;
+        this.setState({ value: val });
+        this.sendData({ key: this.props.name, value: val, change: 1 });
+        ls.set(this.props.name + this.props.pid, val);
     }
     Decrement = () => {
-        this.setState({ value: this.state.value - 1 });
-        this.sendData({ key: this.props.name, value: this.state.value, change: -1 });
+        let val = this.state.value - 1;
+        this.setState({ value: val });
+        this.sendData({ key: this.props.name, value: val, change: -1 });
+        ls.set(this.props.name + this.props.pid, val);
     }
 
     tick() {
@@ -59,6 +66,7 @@ export default class Stat extends React.Component<StatProps, StatState> {
 
     componentDidMount() {
         this.interval = setInterval(() => this.tick(), 1000);
+        this.setState({ value: ls.get(this.props.name + this.props.pid) || this.state.value });
     }
 
     componentWillUnmount() {
