@@ -15,9 +15,9 @@ interface PetProps { parentCallback: any; id: number }
 type PetState = { text: string, name: string, sleeping: boolean };
 
 const STATS = [
-  { name: 'Hunger', value: 100, action: 'Feed', seconds: 0, timer: 2 },
-  { name: 'Hygiene', value: 100, action: 'Shower', seconds: 0, timer: 8 },
-  { name: 'Energy', value: 100, action: 'Sleep', seconds: 0, timer: 4 }];
+  { name: 'Hunger', value: 100, action: 'Feed', seconds: 0, timer: 10 },
+  { name: 'Hygiene', value: 100, action: 'Shower', seconds: 0, timer: 15 },
+  { name: 'Energy', value: 100, action: 'Sleep', seconds: 0, timer: 20 }];
 
 export default class Pet extends React.Component<PetProps, PetState> {
 
@@ -65,7 +65,14 @@ export default class Pet extends React.Component<PetProps, PetState> {
   render() {
 
     if (this.state.name.length < 1) {
-      return <Container className="mb-2"><Card bg="dark" text="light"><Card.Header as="h5">Create pet</Card.Header><Card.Text><Form onSubmit={this.handleSubmit}>
+      return <Container className="mb-2"><Card bg="dark" text="light"><Card.Header as="h5"><Container>
+      <Row>
+<Col><Button className="float-left" variant="danger" onClick={this.Remove}>Delete</Button></Col>
+<Col md="auto">Create pet</Col>
+<Col>
+</Col>
+</Row>
+</Container></Card.Header><Card.Text><Form onSubmit={this.handleSubmit}>
         <Form.Group>
           <Form.Row>
             <Col>

@@ -29,16 +29,20 @@ export default class Stat extends React.Component<StatProps, StatState> {
         this.state = { value: 100, seconds: 0, disabled: this.props.disabled };
     }
     Increment = () => {
-        let val = this.state.value + 1;
-        this.setState({ value: val });
-        this.sendData({ key: this.props.name, value: val, change: 1 });
-        ls.set(this.props.name + this.props.pid, val);
+        if (this.state.value < 100) {
+            let val = this.state.value + 1;
+            this.setState({ value: val });
+            this.sendData({ key: this.props.name, value: val, change: 1 });
+            ls.set(this.props.name + this.props.pid, val);
+        }
     }
     Decrement = () => {
-        let val = this.state.value - 1;
-        this.setState({ value: val });
-        this.sendData({ key: this.props.name, value: val, change: -1 });
-        ls.set(this.props.name + this.props.pid, val);
+        if (this.state.value > 0) {
+            let val = this.state.value - 1;
+            this.setState({ value: val });
+            this.sendData({ key: this.props.name, value: val, change: -1 });
+            ls.set(this.props.name + this.props.pid, val);
+        }
     }
 
     tick() {
