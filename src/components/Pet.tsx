@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
+import { Link } from 'react-router-dom'
 import { MDBContainer } from 'mdbreact';
 import React from 'react';
 import Stat from './Stat'
@@ -99,7 +100,7 @@ export default class Pet extends React.Component<PetProps, PetState> {
         <Container>
           <Row>
     <Col><Button className="float-left" variant="danger" onClick={this.Remove}>Delete</Button></Col>
-    <Col md="auto">{this.state.name}</Col>
+    <Col md="auto"><Link to={'/pet/' + this.props.id}><h4 className="linkText">{this.state.name}</h4></Link></Col>
     <Col>
     </Col>
   </Row>

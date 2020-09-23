@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from "react-dom";
 import Navbar from 'react-bootstrap/Navbar'
 import { MDBContainer, MDBRow, MDBFooter, MDBNavItem, MDBNavLink, MDBNavbarNav, MDBCollapse, MDBNavbarToggler } from 'mdbreact'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css'
 import logo from './petpaw.png';
 
@@ -46,7 +46,8 @@ class App extends React.Component<AppProps, AppState> {
         </header>
         <main role='main' className='flex-shrink-0'>
         <Route exact path='/' component={PetContainer} />
-        <Route exact path='/about' component={About} />
+        <Route path='/about' component={About} />
+        <Route path='/pet/:pet_id' component={PetContainer} />
         </main>
         <footer className='footer mt-auto py-3 text-white fixed-bottom'>
         <MDBFooter color="blue" className="font-small"><div className="footer-copyright text-center py-1">

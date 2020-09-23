@@ -1,4 +1,5 @@
 import Button from 'react-bootstrap/Button'
+import { RouteComponentProps } from 'react-router';
 import React from 'react'
 import { MDBContainer, MDBRow, MDBFooter, MDBNavItem, MDBNavLink, MDBNavbarNav, MDBCollapse, MDBNavbarToggler } from 'mdbreact'
 import '../App.css'
@@ -9,13 +10,17 @@ var ls = require('local-storage');
 
 interface PetContainerProps { }
 
-type PetContainerState = { pets: any, petId: number };
+type PetContainerState = { pets: any, petId: number, singlePet: number };
 
-class PetContainer extends React.Component<PetContainerProps, PetContainerState> {
+interface IReactRouterParams {
+    pet_id: string;
+  }
+
+class PetContainer extends React.Component<PetContainerProps & RouteComponentProps<IReactRouterParams>, PetContainerState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { pets: [], petId: 1 };
+    this.state = { pets: [], petId: 1, singlePet: NaN };
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -54,13 +59,20 @@ class PetContainer extends React.Component<PetContainerProps, PetContainerState>
       console.log("removing " + toRemove[i]);
       ls.remove(toRemove[i]);
     }
+
+    this.setState({ singlePet: this.props.match.params.pet_id === undefined ? NaN : parseInt(this.props.match.params.pet_id) });
   }
 
   render() {
 
     let pets : JSX.Element[] = [];
     for (let i = 0; i < this.state.pets.length; i++) {
-      pets.push(<Pet parentCallback={this.callbackFunction} key={this.state.pets[i]} id={this.state.pets[i]} />);
+        if (isNaN(this.state.singlePet)) {
+            pets.push(<Pet parentCallback={this.callbackFunction} key={this.state.pets[i]} id={this.state.pets[i]} />);
+        }
+        else if (this.state.pets[i] === this.state.singlePet) {
+            pets.push(<Pet parentCallback={this.callbackFunction} key={this.state.pets[i]} id={this.state.pets[i]} />);
+        }
     }
 
     return <MDBContainer><MDBRow>{pets}</MDBRow><MDBRow className="row d-flex justify-content-center text-center"><Button variant="success" onClick={this.handleClick}>Add pet</Button></MDBRow></MDBContainer>;
