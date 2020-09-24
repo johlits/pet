@@ -7,30 +7,25 @@ import Row from 'react-bootstrap/Row'
 import { Link } from 'react-router-dom'
 import { MDBContainer } from 'mdbreact';
 import React from 'react';
+import { connect } from "react-redux"
 import Stat from './Stat'
+import { deletePet, updatePet } from "../redux/actions";
 
-var ls = require('local-storage');
+interface PetProps { parentCallback: any; id: number, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean, deletePet: any, updatePet: any }
 
-interface PetProps { parentCallback: any; id: number }
+type PetState = { text: string, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean };
 
-type PetState = { text: string, name: string, sleeping: boolean };
-
-const STATS = [
-  { name: 'Hunger', value: 100, action: 'Feed', seconds: 0, timer: 10 },
-  { name: 'Hygiene', value: 100, action: 'Shower', seconds: 0, timer: 15 },
-  { name: 'Energy', value: 100, action: 'Sleep', seconds: 0, timer: 20 }];
-
-export default class Pet extends React.Component<PetProps, PetState> {
+class Pet extends React.Component<PetProps, PetState> {
 
   constructor(props: any) {
     super(props);
-    this.state = { text: '', name: '', sleeping: false };
+    this.state = { text: '', name: '', hunger: 100, hygiene: 100, energy: 100, asleep: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   Remove = () => {
-    this.sendData({ id: this.props.id });
+    this.props.deletePet(this.props.id);
   }
 
   sendData = (s: any) => {
@@ -39,11 +34,18 @@ export default class Pet extends React.Component<PetProps, PetState> {
 
   callbackFunction = (childData: any) => {
     if (childData.key === 'Energy' && childData.change === 1) {
-      this.setState({ sleeping: true });
+      this.setState({ asleep: true, energy: childData.value });
     }
     else if (childData.key === 'Energy' && childData.change === -1) {
-      this.setState({ sleeping: false });
+      this.setState({ asleep: false, energy: childData.value });
     }
+    if (childData.key === 'Hunger') {
+      this.setState({ hunger: childData.value });
+    }
+    if (childData.key === 'Hygiene') {
+      this.setState({ hygiene: childData.value });
+    }
+    this.props.updatePet({id: this.props.id, name: this.state.name, hunger: this.state.hunger, hygiene: this.state.hygiene, energy: this.state.energy, asleep: this.state.asleep});
   }
 
   handleChange(e: { target: { value: any; }; }) {
@@ -56,11 +58,11 @@ export default class Pet extends React.Component<PetProps, PetState> {
       return;
     }
     this.setState({ name: this.state.text });
-    ls.set('p' + this.props.id, this.state.text);
+    this.props.updatePet({id: this.props.id, name: this.state.text, hunger: 100, hygiene: 100, energy: 100, asleep: false});
   }
 
   componentDidMount() {
-    this.setState({ name: ls.get('p' + this.props.id) || '' });
+    this.setState({ name: this.props.name, hunger: this.props.hunger, hygiene: this.props.hygiene, energy: this.props.energy, asleep: this.props.asleep });
   }
 
   render() {
@@ -107,10 +109,17 @@ export default class Pet extends React.Component<PetProps, PetState> {
 </Container>
         
         </Card.Header><Card.Text className="mb-1 mt-1">
-        <Stat parentCallback={this.callbackFunction} name={STATS[0].name} action={STATS[0].action} timer={STATS[0].timer} disabled={this.state.sleeping} pid={this.props.id}></Stat>
-        <Stat parentCallback={this.callbackFunction} name={STATS[1].name} action={STATS[1].action} timer={STATS[1].timer} disabled={this.state.sleeping} pid={this.props.id}></Stat>
-        <Stat parentCallback={this.callbackFunction} name={STATS[2].name} action={STATS[2].action} timer={STATS[2].timer} disabled={this.state.sleeping} pid={this.props.id}></Stat>
+        <Stat parentCallback={this.callbackFunction} name='Hunger' action='Feed' disabled={this.state.asleep} pid={this.props.id} val={this.state.hunger}></Stat>
+        <Stat parentCallback={this.callbackFunction} name='Hygiene' action='Shower' disabled={this.state.asleep} pid={this.props.id} val={this.state.hygiene}></Stat>
+        <Stat parentCallback={this.callbackFunction} name='Energy' action='Sleep' disabled={this.state.asleep} pid={this.props.id} val={this.state.energy}></Stat>
       </Card.Text></Card></Container>;
     }
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  let petData = state.pets.pets.find(pet => pet.id === ownProps.id)
+  return { name: petData.name, hunger: petData.hunger, hygiene: petData.hygiene, energy: petData.energy, asleep: petData.asleep };
+}
+
+export default connect(mapStateToProps, { deletePet, updatePet })(Pet);

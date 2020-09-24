@@ -3,15 +3,13 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button';
 import React from 'react';
 
-var ls = require('local-storage');
-
 interface StatProps {
     name: string;
     action: string;
-    timer: number;
     disabled: boolean;
     parentCallback: any;
     pid: number;
+    val: number;
 }
 
 type StatState = {
@@ -33,7 +31,6 @@ export default class Stat extends React.Component<StatProps, StatState> {
             let val = this.state.value + 1;
             this.setState({ value: val });
             this.sendData({ key: this.props.name, value: val, change: 1 });
-            ls.set(this.props.name + this.props.pid, val);
         }
     }
     Decrement = () => {
@@ -41,12 +38,11 @@ export default class Stat extends React.Component<StatProps, StatState> {
             let val = this.state.value - 1;
             this.setState({ value: val });
             this.sendData({ key: this.props.name, value: val, change: -1 });
-            ls.set(this.props.name + this.props.pid, val);
         }
     }
 
     tick() {
-        if (this.state.seconds >= this.props.timer) {
+        if (this.state.seconds >= 10) {
             this.setState(state => ({
                 seconds: 0
             }));
@@ -70,7 +66,7 @@ export default class Stat extends React.Component<StatProps, StatState> {
 
     componentDidMount() {
         this.interval = setInterval(() => this.tick(), 1000);
-        this.setState({ value: ls.get(this.props.name + this.props.pid) || this.state.value });
+        this.setState({ value: this.props.val });
     }
 
     componentWillUnmount() {
