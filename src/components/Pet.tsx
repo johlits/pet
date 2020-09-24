@@ -11,7 +11,7 @@ import { connect } from "react-redux"
 import Stat from './Stat'
 import { deletePet, updatePet } from "../redux/actions";
 
-interface PetProps { parentCallback: any; id: number, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean, deletePet: any, updatePet: any }
+interface PetProps { parentCallback: any; id: number, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean, deletePet: any, updatePet: any, history: any }
 
 type PetState = { text: string, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean };
 
@@ -57,8 +57,8 @@ class Pet extends React.Component<PetProps, PetState> {
     if (this.state.text.length === 0) {
       return;
     }
-    this.setState({ name: this.state.text });
-    this.props.updatePet({id: this.props.id, name: this.state.text, hunger: 100, hygiene: 100, energy: 100, asleep: false});
+    this.setState({ name: this.state.text, hunger: 80, hygiene: 90, energy: 100, asleep: false });
+    this.props.updatePet({id: this.props.id, name: this.state.text, hunger: 80, hygiene: 90, energy: 100, asleep: false});
   }
 
   componentDidMount() {
@@ -118,8 +118,9 @@ class Pet extends React.Component<PetProps, PetState> {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  let petData = state.pets.pets.find(pet => pet.id === ownProps.id)
-  return { name: petData.name, hunger: petData.hunger, hygiene: petData.hygiene, energy: petData.energy, asleep: petData.asleep };
+  let petData = state.pets.pets.find(pet => pet.id === ownProps.id);
+  console.log(petData);
+  return { id: petData.id, name: petData.name, hunger: petData.hunger, hygiene: petData.hygiene, energy: petData.energy, asleep: petData.asleep };
 }
 
 export default connect(mapStateToProps, { deletePet, updatePet })(Pet);

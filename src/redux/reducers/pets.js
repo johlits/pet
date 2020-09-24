@@ -12,7 +12,7 @@ export default function(state = initialState, action) {
           const { id, name, content } = action.payload;
           return {
             ...state,
-            pets: [...state.pets, {id: id, name: name, hunger: 80, hygiene: 90, energy: 100, asleep: false}]
+            pets: [...state.pets, {id: id, name: name, hunger: 100, hygiene: 100, energy: 100, asleep: false}]
           };
         }
         case DELETE_PET: {
