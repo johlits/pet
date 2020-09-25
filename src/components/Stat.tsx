@@ -24,7 +24,7 @@ export default class Stat extends React.Component<StatProps, StatState> {
 
     constructor(props: any) {
         super(props)
-        this.state = { value: 100, seconds: 0, disabled: this.props.disabled };
+        this.state = { value: props.val, seconds: 0, disabled: this.props.disabled };
     }
     Increment = () => {
         if (this.state.value < 100) {
