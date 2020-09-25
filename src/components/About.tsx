@@ -29,12 +29,13 @@ const About = () => {
     }, [count]);
 
     return <MDBContainer className="linkText">
+        <MDBRow className="row d-flex justify-content-center text-center"><h4>About</h4></MDBRow>
         <MDBRow className="row d-flex justify-content-center text-center"><p>Made with React + Redux</p></MDBRow>
-        <MDBRow className="row d-flex justify-content-center text-center">Source code: <a target="_blank" href="https://github.com/johlits/pet">GitHub</a></MDBRow>
+        <MDBRow className="row d-flex justify-content-center text-center">Source code:&nbsp;<a target="_blank" href="https://github.com/johlits/pet">GitHub</a></MDBRow>
         <MDBRow className="row d-flex justify-content-center text-center mt-4">
 <Container>
 <Row>
-  <Col xs={6}>Testing hooks: </Col>
+  <Col xs={6}>Hooks & API: </Col>
   <Col><Button className="btn-block" onClick={handleIncrement}>+</Button></Col>
   <Col>{count}</Col>
   <Col><Button className="btn-block" onClick={handleDecrement}>-</Button></Col>
