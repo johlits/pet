@@ -105,9 +105,11 @@ class Pet extends React.Component<PetProps, PetState> {
         age: age,
       }));
     } else {
-      this.setState((state) => ({
-        seconds: state.seconds + 1,
-      }));
+      if (this.state.hunger > 0 && this.state.hygiene > 0 && this.state.energy > 0) {
+        this.setState((state) => ({
+          seconds: state.seconds + 1,
+        }));
+      }
     }
   }
 
