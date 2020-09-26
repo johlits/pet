@@ -10,16 +10,19 @@ import React from 'react';
 import { connect } from "react-redux"
 import Stat from './Stat'
 import { deletePet, updatePet } from "../redux/actions";
+import ProgressBar from 'react-bootstrap/ProgressBar'
 
-interface PetProps { parentCallback: any; id: number, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean, deletePet: any, updatePet: any, history: any }
+interface PetProps { parentCallback: any; id: number, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean, deletePet: any, updatePet: any, age: number, seconds: number }
 
-type PetState = { text: string, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean };
+type PetState = { text: string, name: string, hunger: number, hygiene: number, energy: number, asleep: boolean, age: number, seconds: number };
 
 class Pet extends React.Component<PetProps, PetState> {
 
+  interval: any;
+
   constructor(props: any) {
     super(props);
-    this.state = { text: '', name: '', hunger: 100, hygiene: 100, energy: 100, asleep: false };
+    this.state = { text: '', name: '', hunger: 100, hygiene: 100, energy: 100, asleep: false, age: 1, seconds: 0 };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -33,19 +36,45 @@ class Pet extends React.Component<PetProps, PetState> {
   }
 
   callbackFunction = (childData: any) => {
-    if (childData.key === 'Energy' && childData.change === 1) {
-      this.setState({ asleep: true, energy: childData.value });
+    
+    if (childData.key === 'Energy') {
+      if (childData.change === 1) {
+        if (childData.value >= 100) {
+          this.setState({ asleep: false, energy: childData.value });
+        }
+        else {
+          this.setState({ asleep: true, energy: childData.value });
+        }
+      }
+      else {
+        this.setState({ asleep: false, energy: childData.value });
+      }
     }
-    else if (childData.key === 'Energy' && childData.change === -1) {
-      this.setState({ asleep: false, energy: childData.value });
-    }
+    
     if (childData.key === 'Hunger') {
       this.setState({ hunger: childData.value });
     }
+    
     if (childData.key === 'Hygiene') {
       this.setState({ hygiene: childData.value });
     }
-    this.props.updatePet({id: this.props.id, name: this.state.name, hunger: this.state.hunger, hygiene: this.state.hygiene, energy: this.state.energy, asleep: this.state.asleep});
+    
+    this.props.updatePet({id: this.props.id, name: this.state.name, hunger: this.state.hunger, hygiene: this.state.hygiene, energy: this.state.energy, asleep: this.state.asleep, seconds: this.state.seconds, age: this.state.age});
+  }
+  
+  tick() {
+      if (this.state.seconds >= 100) {
+          let age = this.state.age + 1;
+          this.setState(state => ({
+              seconds: 0,
+              age: age
+          }));
+      }
+      else {
+          this.setState(state => ({
+              seconds: state.seconds + 1
+          }));
+      }
   }
 
   handleChange(e: { target: { value: any; }; }) {
@@ -57,12 +86,17 @@ class Pet extends React.Component<PetProps, PetState> {
     if (this.state.text.length === 0) {
       return;
     }
-    this.setState({ name: this.state.text, hunger: 80, hygiene: 90, energy: 100, asleep: false });
-    this.props.updatePet({id: this.props.id, name: this.state.text, hunger: 80, hygiene: 90, energy: 100, asleep: false});
+    this.setState({ name: this.state.text, hunger: 80, hygiene: 90, energy: 100, asleep: false, age: 1, seconds: 0 });
+    this.props.updatePet({id: this.props.id, name: this.state.text, hunger: 80, hygiene: 90, energy: 100, asleep: false, age: 1, seconds: 0});
   }
 
   componentDidMount() {
-    this.setState({ name: this.props.name, hunger: this.props.hunger, hygiene: this.props.hygiene, energy: this.props.energy, asleep: this.props.asleep });
+    this.setState({ name: this.props.name, hunger: this.props.hunger, hygiene: this.props.hygiene, energy: this.props.energy, asleep: this.props.asleep, seconds: this.props.seconds, age: this.props.age });
+    this.interval = setInterval(() => this.tick(), 1000);
+  }
+  
+  componentWillUnmount() {
+      clearInterval(this.interval);
   }
 
   render() {
@@ -102,9 +136,8 @@ class Pet extends React.Component<PetProps, PetState> {
         <Container>
           <Row>
     <Col><Button className="float-left" variant="danger" onClick={this.Remove}>Delete</Button></Col>
-    <Col md="auto"><Link to={'/pet/' + this.props.id}><h4 className="linkText">{this.state.name}</h4></Link></Col>
-    <Col>
-    </Col>
+    <Col md="auto"><Link to={'/pet/' + this.props.id}><h4 className="linkText">{this.state.name}{this.state.asleep ? ' (Sleeping)' : ''}</h4></Link></Col>
+    <Col><h5 className="linkText float-right">Age: {this.state.age}</h5></Col>
   </Row>
 </Container>
         
@@ -112,6 +145,7 @@ class Pet extends React.Component<PetProps, PetState> {
         <Stat parentCallback={this.callbackFunction} name='Hunger' action='Feed' disabled={this.state.asleep} pid={this.props.id} val={this.state.hunger}></Stat>
         <Stat parentCallback={this.callbackFunction} name='Hygiene' action='Shower' disabled={this.state.asleep} pid={this.props.id} val={this.state.hygiene}></Stat>
         <Stat parentCallback={this.callbackFunction} name='Energy' action='Sleep' disabled={this.state.asleep} pid={this.props.id} val={this.state.energy}></Stat>
+        <ProgressBar now={this.state.seconds} label={`${this.state.seconds}%`} />
       </Card.Text></Card></Container>;
     }
   }
@@ -120,7 +154,7 @@ class Pet extends React.Component<PetProps, PetState> {
 const mapStateToProps = (state, ownProps) => {
   let petData = state.pets.pets.find(pet => pet.id === ownProps.id);
   console.log(petData);
-  return { id: petData.id, name: petData.name, hunger: petData.hunger, hygiene: petData.hygiene, energy: petData.energy, asleep: petData.asleep };
+  return { id: petData.id, name: petData.name, hunger: petData.hunger, hygiene: petData.hygiene, energy: petData.energy, asleep: petData.asleep, age: petData.age, seconds: petData.seconds };
 }
 
 export default connect(mapStateToProps, { deletePet, updatePet })(Pet);

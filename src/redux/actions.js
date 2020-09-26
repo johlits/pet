@@ -24,6 +24,8 @@ export const deletePet = id => ({
       hunger: content.hunger,
       hygiene: content.hygiene,
       energy: content.energy,
-      asleep: content.asleep
+      asleep: content.asleep,
+      age: content.age,
+      seconds: content.seconds
     }
   });

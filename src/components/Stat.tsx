@@ -26,31 +26,31 @@ export default class Stat extends React.Component<StatProps, StatState> {
         super(props)
         this.state = { value: props.val, seconds: 0, disabled: this.props.disabled };
     }
-    Increment = () => {
+    Increment = (amount: number) => {
         if (this.state.value < 100) {
-            let val = this.state.value + 1;
+            let val = Math.min(this.state.value + amount, 100);
             this.setState({ value: val });
             this.sendData({ key: this.props.name, value: val, change: 1 });
         }
     }
-    Decrement = () => {
+    Decrement = (amount: number) => {
         if (this.state.value > 0) {
-            let val = this.state.value - 1;
+            let val = this.state.value - amount;
             this.setState({ value: val });
             this.sendData({ key: this.props.name, value: val, change: -1 });
         }
     }
 
     tick() {
-        if (this.state.seconds >= 10) {
+        if (this.state.seconds >= 8) {
             this.setState(state => ({
                 seconds: 0
             }));
             if (this.state.disabled && this.props.name === 'Energy' && this.state.value < 100) {
-                this.Increment();
+                this.Increment(2);
             }
             else {
-                this.Decrement();
+                this.Decrement(1);
             }
         }
         else {
@@ -80,6 +80,6 @@ export default class Stat extends React.Component<StatProps, StatState> {
     }
 
     render() {
-        return <Row className="mb-1 mt-1"><Col xs={4}>{this.props.name}</Col><Col xs={4}>{this.state.value}</Col><Col xs={4}><Button variant="secondary" onClick={this.Increment} disabled={this.state.disabled || this.state.value >= 100}>{this.props.action}</Button></Col></Row>;
+        return <Row className="mb-1 mt-1"><Col xs={4}>{this.props.name}</Col><Col xs={4}>{this.state.value}</Col><Col xs={4}><Button variant="secondary" onClick={() => this.Increment(1)} disabled={this.state.disabled || this.state.value >= 100}>{this.props.action}</Button></Col></Row>;
     }
 }

@@ -12,7 +12,7 @@ export default function(state = initialState, action) {
           const { id, name, content } = action.payload;
           return {
             ...state,
-            pets: [...state.pets, {id: id, name: name, hunger: 100, hygiene: 100, energy: 100, asleep: false}]
+          pets: [...state.pets, {id: id, name: name, hunger: 100, hygiene: 100, energy: 100, asleep: false, age: 1, seconds: 0}]
           };
         }
         case DELETE_PET: {
@@ -26,7 +26,7 @@ export default function(state = initialState, action) {
             };
           }
         case UPDATE_PET: {
-            const { id, name, hunger, hygiene, energy, asleep, content } = action.payload;
+            const { id, name, hunger, hygiene, energy, asleep, age, seconds, content } = action.payload;
             let newPets = state.pets;
             for (let i = 0; i < newPets.length; i++) {
                 if (newPets[i].id === id) {
@@ -35,6 +35,8 @@ export default function(state = initialState, action) {
                     newPets[i].hygiene = hygiene;
                     newPets[i].energy = energy;
                     newPets[i].asleep = asleep;
+                    newPets[i].age = age;
+                    newPets[i].seconds = seconds;
                 }
             }
 
