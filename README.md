@@ -1,8 +1,22 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was created to learn React, Redux, Typescript, Node and more.
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.<br />
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.<br />
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `node server/server.js`
+
+Run express server in Node.js.
 
 ### `npm start`
 
@@ -16,16 +30,6 @@ You will also see any lint errors in the console.
 
 Launches the test runner in the interactive watch mode.<br />
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### `npm run eject`
 
@@ -43,3 +47,5 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 "# pet" 
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
