@@ -4,6 +4,13 @@ import { MDBContainer, MDBRow } from "mdbreact";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { css } from "@emotion/core";
+import PulseLoader from "react-spinners/PulseLoader";
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+`;
 
 const About = () => {
   const [count, setCount] = useState(50);
@@ -18,6 +25,7 @@ const About = () => {
   };
 
   useEffect(() => {
+    setQuote('');
     const API =
       "https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/";
     fetch(API)
@@ -38,7 +46,7 @@ const About = () => {
       </MDBRow>
       <MDBRow className="row d-flex justify-content-center text-center">
         Source code:&nbsp;
-        <a target="_blank" href="https://github.com/johlits/pet">
+        <a href="https://github.com/johlits/pet">
           GitHub
         </a>
       </MDBRow>
@@ -61,7 +69,12 @@ const About = () => {
         </Container>
       </MDBRow>
       <MDBRow className="row d-flex justify-content-center text-center mt-2">
-        <i>{quote}</i>
+        <i>{quote === '' ? <PulseLoader
+          css={override}
+          size={32}
+          color={"#ffffff"}
+          loading={true}
+        /> : quote}</i>
       </MDBRow>
     </MDBContainer>
   );

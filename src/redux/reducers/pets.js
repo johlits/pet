@@ -6,10 +6,10 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
-  console.log(action);
+
   switch (action.type) {
     case ADD_PET: {
-      const { id, name, content } = action.payload;
+      const { id, name } = action.payload;
       return {
         ...state,
         pets: [
@@ -28,7 +28,7 @@ export default function (state = initialState, action) {
       };
     }
     case DELETE_PET: {
-      const { id, content } = action.payload;
+      const { id } = action.payload;
       let newPets = state.pets.filter((pet) => {
         return pet.id !== id;
       });
@@ -47,7 +47,6 @@ export default function (state = initialState, action) {
         asleep,
         age,
         seconds,
-        content,
       } = action.payload;
       let newPets = state.pets;
       for (let i = 0; i < newPets.length; i++) {

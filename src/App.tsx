@@ -1,9 +1,7 @@
 import React from "react";
-import { render } from "react-dom";
 import Navbar from "react-bootstrap/Navbar";
 import {
   MDBContainer,
-  MDBRow,
   MDBFooter,
   MDBNavItem,
   MDBNavLink,
@@ -11,7 +9,7 @@ import {
   MDBCollapse,
   MDBNavbarToggler,
 } from "mdbreact";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import logo from "./petpaw.png";
 
